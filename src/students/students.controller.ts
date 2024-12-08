@@ -6,7 +6,9 @@ import { Student } from './entities/student.entity';
 
 @Controller('students')
 export class StudentsController {
-  constructor(private studentsService: StudentsService) { }
+  constructor(
+    private readonly studentsService: StudentsService
+  ) { }
 
   @Post()
   create(@Body() createStudentDto: CreateStudentDto): Promise<Student> {
@@ -16,6 +18,11 @@ export class StudentsController {
   @Get()
   findAll(): Promise<Student[]> {
     return this.studentsService.findAll();
+  }
+
+  @Get('/birthdays-today')
+  getStudentsWithBirthdayToday(): Promise<Student[]> {
+    return this.studentsService.getStudentsWithBirthdayToday();
   }
 
   @Get(':id')

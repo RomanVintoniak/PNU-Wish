@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 export class StudentsService {
   constructor(
     @InjectRepository(Student)
-    private studentsRepository: Repository<Student>,
+    private readonly studentsRepository: Repository<Student>,
   ) { }
 
   async create(createStudentDto: CreateStudentDto): Promise<Student> {
@@ -56,5 +56,16 @@ export class StudentsService {
     }
 
     return await this.studentsRepository.remove(student);
+  }
+
+  async getStudentsWithBirthdayToday(): Promise<Student[]> {
+    const today = new Date();
+    const month = today.getMonth() + 1; // Months are 0-based
+    const day = today.getDate();
+
+    return await this.studentsRepository.createQueryBuilder('studentsWithBirthdayToday')
+      .where('MONTH(dateOfBirth) = :month', { month })
+      .andWhere('DAY(dateOfBirth) = :day', { day })
+      .getMany();
   }
 }
