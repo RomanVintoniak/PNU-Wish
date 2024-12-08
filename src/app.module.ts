@@ -2,19 +2,26 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { StudentsModule } from './students/students.module';
-import { CronJobsService } from './cron-jobs/cron-jobs.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from '../db/data-source';
+import { CronJobsModule } from './cron-jobs/cron-jobs.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { BullModule } from '@nestjs/bullmq';
+import { EmailNotificationsConsumer } from './queues/consumers/email-notifications.consumer';
+import { bullConfig } from './shared/configs/bull-config';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(dataSourceOptions),
-    StudentsModule
+    BullModule.forRoot(bullConfig),
+    ScheduleModule.forRoot(),
+    StudentsModule,
+    CronJobsModule
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    CronJobsService
-  ],
+    EmailNotificationsConsumer
+  ]
 })
 export class AppModule { }
