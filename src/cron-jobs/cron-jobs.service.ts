@@ -14,9 +14,9 @@ export class CronJobsService {
     private readonly studentsService: StudentsService
   ) { }
 
-  @Cron(CronExpression.EVERY_30_SECONDS)
+  @Cron(CronExpression.EVERY_DAY_AT_10AM)
   async getStudentsWithBirthdayToday() {
-    this.logger.debug('Cron has been fired');
+    this.logger.debug(`Cron ${this.getStudentsWithBirthdayToday.name} has been fired`);
 
     const students = await this.studentsService.getStudentsWithBirthdayToday();
 

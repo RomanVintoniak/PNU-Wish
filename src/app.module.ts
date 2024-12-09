@@ -9,11 +9,14 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { BullModule } from '@nestjs/bullmq';
 import { EmailNotificationsConsumer } from './queues/consumers/email-notifications.consumer';
 import { bullConfig } from './shared/configs/bull-config';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { mailerConfig } from './shared/configs/mailer-config';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(dataSourceOptions),
     BullModule.forRoot(bullConfig),
+    MailerModule.forRoot(mailerConfig),
     ScheduleModule.forRoot(),
     StudentsModule,
     CronJobsModule
